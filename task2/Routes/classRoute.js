@@ -1,29 +1,33 @@
 const express = require("express");
 const classRoute = express.Router();
-
-let classes = [{ id: 1, name: "1-a" }];
+const classController = require("../Controllers/classController");
+const validator = require("../Middlewares/validationMW");
 
 classRoute
   .route("/class")
-  .get((req, res) => {
-    res.status(200).json({ data: classes });
-  })
-  .post((req, res) => {
-    classes.push(req.body);
-    res.status(201).json({ message: "added" });
-  })
-  .put((req, res) => {
-    const { id, name } = req.body;
-    const index = classes.findIndex((item) => item.id === +id);
-    if (index != -1) {
-        classes[index] = { id, name };
-    }
-    res.status(200).json({ message: "updated" });
-  })
-  .delete((req, res) => {
-    const { id } = req.body;
-    classes = classes.filter((item) => item.id !== +id);
-    res.status(200).json({ message: "deleted" });
-  });
+  .get(classController.getAll)
+  .post(validator.addClass, validator.results, classController.add)
+  .put(validator.updateClass, validator.results, classController.update)
+  .delete(validator.numircId("id"), validator.results, classController.delete);
+
+classRoute
+  .route("/class/:id")
+  .get(validator.numircId("id"), validator.results, classController.getById);
+
+classRoute
+  .route("/classChildren/:id")
+  .get(
+    validator.numircId("id"),
+    validator.results,
+    classController.getChildren
+  );
+
+classRoute
+  .route("/classTeacher/:id")
+  .get(
+    validator.numircId("id"),
+    validator.results,
+    classController.getSupervisor
+  );
 
 module.exports = classRoute;
