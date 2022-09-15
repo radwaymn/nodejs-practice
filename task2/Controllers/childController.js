@@ -21,6 +21,7 @@ exports.getById = (req, res, next) => {
 exports.add = async (req, res, next) => {
   const { fullname, age, level, address } = req.body;
   const { city, street, building } = address;
+  const image = req.file.path;
 
   const _id = await Child.find()
     .select("_id")
@@ -33,6 +34,7 @@ exports.add = async (req, res, next) => {
     fullname,
     age,
     level,
+    image,
     address: {
       city,
       street,
@@ -64,6 +66,16 @@ exports.update = (req, res, next) => {
       },
     }
   )
+    .then((data) => {
+      if (!data) throw customError("Child not found", 404);
+      res.status(200).json({ message: "updated" });
+    })
+    .catch((error) => next(error));
+};
+
+exports.updateImage = (req, res, next) => {
+  const image = req.file.path;
+  Child.findOneAndUpdate({ _id: req.body.id }, { image })
     .then((data) => {
       if (!data) throw customError("Child not found", 404);
       res.status(200).json({ message: "updated" });

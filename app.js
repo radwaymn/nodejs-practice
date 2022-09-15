@@ -14,6 +14,8 @@ require("dotenv").config();
 const teacherRoute = require("./task2/Routes/teacherRoute");
 const childRoute = require("./task2/Routes/childRoute");
 const classRoute = require("./task2/Routes/classRoute");
+const loginRoute = require("./task2/Routes/loginRoute");
+
 const port = 8080 || process.env.PORT;
 
 // database connection and server listening
@@ -25,7 +27,10 @@ mongoose
       console.log("Server is listening on port", port);
     });
   })
-  .catch((error) => console.log(error));
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
 
 // middlewares
 app.use(morgan("tiny"));
@@ -33,6 +38,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // routes
+app.use(loginRoute);
 app.use(teacherRoute);
 app.use(childRoute);
 app.use(classRoute);

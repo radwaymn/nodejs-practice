@@ -2,6 +2,10 @@ const express = require("express");
 const classRoute = express.Router();
 const classController = require("../Controllers/classController");
 const validator = require("../Middlewares/validationMW");
+const auth = require("../Middlewares/auth");
+const isAdmin = require("../Middlewares/adminAuth");
+
+classRoute.use(auth, isAdmin);
 
 classRoute
   .route("/class")

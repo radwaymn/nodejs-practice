@@ -22,10 +22,10 @@ const email = body("email")
   .isEmail()
   .withMessage("email must be in correct email format");
 
-const image = body("image")
-  .optional()
-  .isURL()
-  .withMessage("image must be a url string");
+// const image = body("image")
+//   .optional()
+//   .isURL()
+//   .withMessage("image must be a url string");
 
 const age = body("age").isNumeric().withMessage("age must be numirc value");
 
@@ -73,8 +73,8 @@ exports.results = (req, res, next) => {
 exports.objectId = objectId;
 exports.numircId = numircId;
 
-exports.addTeacher = [fullName, email, password, image];
-exports.updatTeacher = [objectId("id"), fullName, email, password, image];
+exports.addTeacher = [fullName, email, password];
+exports.updateTeacher = [objectId("id"), fullName, email, password];
 
 exports.addChild = [fullName, age, level, address];
 exports.updateChild = [numircId("id"), fullName, age, level, address];

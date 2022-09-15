@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const schema = new mongoose.Schema({
   fullname: {
@@ -20,6 +20,10 @@ const schema = new mongoose.Schema({
     default:
       "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
   },
+  role: {
+    type: String,
+    default: "teacher"
+  }
 });
 
 schema.pre("save", async function(next) {

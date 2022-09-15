@@ -19,3 +19,15 @@ Add models and controllers.
 Validation using express-validator.
 
 Saving data in mongo database.
+
+Password hashing using bcrypt.
+
+Using .env file.
+
+### Task 4
+continue task 2 & 3
+
+Image upload using multer.
+
+Authentication using JWT.
+

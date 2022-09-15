@@ -19,7 +19,8 @@ exports.getById = (req, res, next) => {
 };
 
 exports.add = (req, res, next) => {
-  const { fullname, password, email, image } = req.body;
+  const { fullname, password, email } = req.body;
+  const image = req.file.path;
   const teacher = new Teacher({
     fullname,
     password,
@@ -36,16 +37,24 @@ exports.add = (req, res, next) => {
 };
 
 exports.update = (req, res, next) => {
-  const { id, fullname, password, email, image } = req.body;
-  Teacher.findOneAndUpdate(
-    { _id: id },
-    {
-      fullname,
-      password,
-      email,
-      image,
-    }
-  )
+  const { fullname, password, email } = req.body;
+  Teacher.findOne({ _id: req.userId })
+    .then((data) => {
+      if (!data) throw customError("Teacher not found", 404);
+
+      data.fullname = fullname;
+      data.email = email;
+      data.password = password;
+      data.save();
+
+      res.status(200).json({ message: "updated" });
+    })
+    .catch((error) => next(error));
+};
+
+exports.updateImage = (req, res, next) => {
+  const image = req.file.path;
+  Teacher.findOneAndUpdate({ _id: req.userId }, { image })
     .then((data) => {
       if (!data) throw customError("Teacher not found", 404);
       res.status(200).json({ message: "updated" });
